@@ -4,7 +4,7 @@ https://docs.strapi.io/developer-docs/latest/getting-started/quick-start.html
 
 Use current Node LTS version 16.13.2.
 
-`nvm use lts/\*`
+`nvm use lts/*`
 
 When the installation is finished you will fill in the Admin user data under `http://localhost:1337/admin/`.
 
