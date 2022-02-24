@@ -103,6 +103,8 @@ async function register() {
 	console.log(payload);
 
 	try {
+		// 1.
+		// send the credentials of the new End User to the Strapi "register" route
 		const response = await fetch('http://localhost:1337/api/auth/local/register', {
 			method: 'POST',
 			headers: {
@@ -120,6 +122,8 @@ async function register() {
 
 			if (jwt) {
 				try {
+					// 2.
+					// deal with the response from Strapi and the JWT in the body of the response
 					const response = await fetch('/auth/register', {
 						method: 'POST',
 						headers: {
@@ -158,6 +162,7 @@ async function register() {
 	console.log(payload);
 
 	try {
+		// 1.
 		// we just "forward" the End User credentials to be dealt with by Strapi in the SvelteKit endpoint
 		const response = await fetch('/auth/register', {
 			method: 'POST',
@@ -185,6 +190,7 @@ export async function post({ request }) {
 	console.log(payload);
 
 	try {
+		// 2.
 		// getting the the End User credentials from the client we now deal with Strapi and the JWT on the server
 		const strapiResponse = await fetch('http://localhost:1337/api/auth/local/register', {
 			method: 'POST',
@@ -202,9 +208,17 @@ export async function post({ request }) {
 			console.log(jwt);
 
 			if (jwt) {
+				//
+				// set JWT cookie
 				const headers = {
-					Authorization: 'Bearer ' + jwt
+					'Set-Cookie': cookie.serialize('jwt', jwt, {
+						httpOnly: true,
+						maxAge: 60 * 5, // 5 minutes valid
+						sameSite: 'strict',
+						path: '/'
+					})
 				};
+
 				return {
 					status: 200,
 					headers,

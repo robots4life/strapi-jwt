@@ -26,22 +26,18 @@ export async function post({ request }) {
 				// set JWT cookie
 				const headers = {
 					'Set-Cookie': cookie.serialize('jwt', jwt, {
-						// httpOnly: true,
+						httpOnly: true,
 						maxAge: 60 * 5, // 5 minutes valid
 						sameSite: 'strict',
 						path: '/'
 					})
 				};
 
-				//
-				// const headers = {
-				// 	Authorization: 'Bearer ' + jwt
-				// };
 				return {
 					status: 200,
 					headers,
 					body: {
-						message: 'Server says : Registration successful'
+						message: 'Server says : Login successful'
 					}
 				};
 			}
