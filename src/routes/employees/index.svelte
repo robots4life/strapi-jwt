@@ -41,7 +41,7 @@
 
 <p>{JSON.stringify(locals)}</p>
 
-<button on:click="{buttonFetchPosts}">Fetch Posts from JSONPlaceholder</button>
+<button on:click="{buttonFetchPosts}">Fetch Employees Data</button>
 
 {#if fetchDataPromise}
 	<h1>Button Fetch Posts</h1>
