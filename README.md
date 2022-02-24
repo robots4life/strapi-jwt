@@ -2,12 +2,28 @@
 
 https://docs.strapi.io/developer-docs/latest/getting-started/quick-start.html
 
-Use current Node LTS version 16.13.2.
+Use the current Node LTS version <b>16.13.2</b> to install Strapi.
 
 `nvm use lts/*`
 
+`npx create-strapi-app@latest strapi-demo --quickstart`
+
 When the installation is finished you will fill in the Super Admin user data under `http://localhost:1337/admin/`.
 
+Be sure to understand that with this Super Admin user you cannot make authenticated requests, you will have to create an End User for that use case.
+
+<br />
+<i>
+Simply put, an <b>Admin User</b> can access the Strapi dashboard. An Admin User may create content types, add content, manage API access, install plugins, etc.
+<br />
+<br />
+An <b>End User</b> can only consume the API. This may include adding content but through the GET/POST methods in a form - not the Strapi dashboard. For example, for an ecommerce account, to leave a comment/review, to be the author of an article or otherwise have a profile.
+</i>
+
+https://strapi.io/blog/why-we-split-the-management-of-the-admin-users-and-end-users
+
+<br />
+<br />
 <b>The Strapi Dashboard > Settings then looks like this.</b>
 
 <img src="/images/Screenshot_20220223_144238.png">
@@ -26,7 +42,7 @@ When the installation is finished you will fill in the Super Admin user data und
 
 # 2. Create Content Type Employee with Content-Type-Builder
 
-Here is Strapi documentation on how to create a content type with the Content-Type builder.
+Here is Strapi documentation on how to create a content type with the Content-Type builder.  
 https://docs.strapi.io/developer-docs/latest/getting-started/quick-start.html#%F0%9F%9B%A0-part-b-build-your-content
 
 <b>I created a content type "Employee" with the following fields.</b>
@@ -47,11 +63,11 @@ https://docs.strapi.io/developer-docs/latest/getting-started/quick-start.html#%F
 <br />
 <br />
 
-# 4. Set Permission on the `/api/employees` Endpoint
+# 4. Set Public Permission on the `/api/employees` Route
 
-By default newly created content types, i.e. employee, has no public or authenticated permissions.
+By default a newly created content type, i.e. employee, has no public permissions.
 
-<b>I allowed `find` and `findOne` for the Public role of an unauthenticated user.</b>
+<b>I allow `find` and `findOne` for the Public role of an unauthenticated user.</b>
 
 <img src="/images/Screenshot_20220223_165809.png">
 <br />
@@ -66,3 +82,41 @@ By default newly created content types, i.e. employee, has no public or authenti
 <br />
 <br />
 <br />
+
+# 5. Register an Authenticated End User through the Strapi API
+
+The Authenticated role is the default role that is given to every new user if no role is provided at creation.
+
+When you create an End User without a role or if you use the `/api/auth/local/register` route, the authenticated role is given to the user.
+
+https://docs.strapi.io/developer-docs/latest/plugins/users-permissions.html#authenticated-role
+
+```javascript
+let username, email, password, payload;
+
+async function register() {
+	payload = {
+		username: username,
+		email: email,
+		password: password
+	};
+	console.log(payload);
+
+	try {
+		const response = await fetch('http://localhost:1337/api/auth/local/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(payload)
+		});
+
+		if (response.ok) {
+			const responseDetails = await response.json();
+			console.log(responseDetails);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+}
+```
