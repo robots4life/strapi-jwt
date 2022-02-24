@@ -1,3 +1,5 @@
+import * as cookie from 'cookie';
+
 export async function post({ request }) {
 	const payload = await request.json();
 	console.log(payload);
@@ -20,9 +22,21 @@ export async function post({ request }) {
 			console.log(jwt);
 
 			if (jwt) {
+				//
+				// set JWT cookie
 				const headers = {
-					Authorization: 'Bearer ' + jwt
+					'Set-Cookie': cookie.serialize('jwt', jwt, {
+						// httpOnly: true,
+						maxAge: 60 * 5, // 5 minutes valid
+						sameSite: 'strict',
+						path: '/'
+					})
 				};
+
+				//
+				// const headers = {
+				// 	Authorization: 'Bearer ' + jwt
+				// };
 				return {
 					status: 200,
 					headers,
