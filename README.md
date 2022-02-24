@@ -145,8 +145,12 @@ async function register() {
 }
 ```
 
-The above code has two fetch calls. One that deals with registering the new End User and another one that deals with setting up the received JWT from Strapi on the SvelteKit endpoint.
-This does not feel "quite right" to me.
+The above code has two fetch calls. One that deals with registering the new End User and another one that deals with setting up the received JWT from Strapi on the SvelteKit endpoint. This does not feel "quite right" to me.
+
+<br />
+<br />
+<br />
+<br />
 
 I think it is "better" to send the user given data to register a new End User to the SvelteKit endpoint `auth/register` first and there continue to deal with Strapi and the returned JWT.
 
@@ -233,6 +237,11 @@ export async function post({ request }) {
 	}
 }
 ```
+
+<br />
+<br />
+<br />
+<br />
 
 <b>Logs from these calls then result in successful return of the End User data and the JWT.</b>
 

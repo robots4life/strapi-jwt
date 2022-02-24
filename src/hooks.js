@@ -47,10 +47,10 @@ export async function getSession(event) {
 	// ==
 	// D
 	// make the event.locals.token data available on the session
-	console.log(event.locals);
+	// console.log(event.locals);
 
 	if (event.locals !== null) {
-		console.log(event.locals.token);
+		// console.log(event.locals.token);
 		return event.locals.token;
 	}
 
