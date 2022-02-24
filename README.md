@@ -221,7 +221,9 @@ export async function post({ request }) {
 ```
 
 <b>Logs from these calls then result in successful return of the End User data and the JWT.</b>
+
 <img src="/images/Screenshot_20220224_033627.png">
+<br />
 <br />
 <img src="images/Screenshot_20220224_033703.png">
 <br />
