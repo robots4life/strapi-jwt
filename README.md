@@ -92,7 +92,7 @@ When you create an End User without a role or if you use the `/api/auth/local/re
 https://docs.strapi.io/developer-docs/latest/plugins/users-permissions.html#authenticated-role
 
 ```javascript
-let username, email, password, payload;
+// Register.svelte
 
 async function register() {
 	payload = {
@@ -113,7 +113,106 @@ async function register() {
 
 		if (response.ok) {
 			const responseDetails = await response.json();
+			// console.log(responseDetails);
+
+			const jwt = responseDetails.jwt;
+			console.log(jwt);
+
+			if (jwt) {
+				try {
+					const response = await fetch('/auth/register', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(jwt)
+					});
+
+					const responseDetails = await response.json();
+					console.log(responseDetails);
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
+}
+```
+
+The above code has two fetch calls. One that deals with registering the new End User and another one that deals with setting up the received JWT from Strapi on the SvelteKit endpoint.
+This does not feel "quite right" to me.
+
+I think it is "better" to send the user given data to register a new End User to the SvelteKit endpoint `auth/register` first and there continue to deal with Strapi and the returned JWT.
+
+```javascript
+// Register.svelte
+
+async function register() {
+	payload = {
+		username: username,
+		email: email,
+		password: password
+	};
+	console.log(payload);
+
+	try {
+		// we just "forward" the End User credentials to be dealt with by Strapi in the SvelteKit endpoint
+		const response = await fetch('/auth/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(payload)
+		});
+
+		if (response.ok) {
+			const responseDetails = await response.json();
 			console.log(responseDetails);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+}
+```
+
+```javascript
+// /auth/register.js
+
+export async function post({ request }) {
+	const payload = await request.json();
+	console.log(payload);
+
+	try {
+		// getting the the End User credentials from the client we now deal with Strapi and the JWT on the server
+		const strapiResponse = await fetch('http://localhost:1337/api/auth/local/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(payload)
+		});
+
+		if (strapiResponse.ok) {
+			const strapiResponseDetails = await strapiResponse.json();
+			console.log(strapiResponseDetails);
+
+			const jwt = strapiResponseDetails.jwt;
+			console.log(jwt);
+
+			if (jwt) {
+				const headers = {
+					Authorization: 'Bearer ' + jwt
+				};
+				return {
+					status: 200,
+					headers,
+					body: {
+						message: 'Server says : Registration successful'
+					}
+				};
+			}
 		}
 	} catch (error) {
 		console.log(error);
