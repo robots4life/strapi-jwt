@@ -50,7 +50,7 @@ export async function getSession(event) {
 	// console.log(event.locals);
 
 	if (event.locals !== null) {
-		// console.log(event.locals.token);
+		console.log(event.locals.token);
 		return event.locals.token;
 	}
 

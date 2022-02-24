@@ -14,7 +14,19 @@
 	function buttonFetchPosts() {
 		// load external data on click of button function
 		async function fetchEmployees() {
-			let response = await fetch('http://localhost:1337/api/employees/');
+			//
+			// https://docs.strapi.io/developer-docs/latest/guides/auth-request.html#fetch-articles
+
+			//
+			// fetch employee data as an authenticated End User
+
+			let response = await fetch('http://localhost:1337/api/employees/', {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + locals.token,
+					'Content-Type': 'application/json'
+				}
+			});
 
 			let employeesData = await response.json();
 
