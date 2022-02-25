@@ -251,8 +251,3 @@ export async function post({ request }) {
 <img src="images/Screenshot_20220224_033703.png">
 <br />
 <br />
-<img src="/images/Screenshot_20220224_035728.png">
-<br />
-<br />
-<br />
-<br />
